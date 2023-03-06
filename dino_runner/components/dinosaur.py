@@ -23,28 +23,30 @@ class Dinosaur(Sprite):
 
     def update(self, user_input):
      if self.dino_running:
-        self.run()
-     elif self.dino_ducking:
-        self.duck()
-     elif self.dino_jumping:
-        self.jump()
+         self.run()
+
+     if self.dino_ducking:
+         self.duck()
+
+     if self.dino_jumping:
+         self.jump()
 
      if user_input[pygame.K_DOWN] and not self.dino_jumping:
-        self.dino_running = False 
-        self.dino_ducking = True
-        self.dino_jumping = False
-     elif user_input[pygame.K_UP] and not self.dino_jumping and not self.dino_ducking:
-        self.dino_running = False 
-        self.dino_ducking = False
-        self.dino_jumping = True
-        self.jump_vel = self.JUMP_VEL
-     elif not user_input[pygame.K_UP] and not user_input[pygame.K_DOWN]:
-        self.dino_running = True
-        self.dino_ducking = False
-        self.dino_jumping = False
+         self.dino_running = False 
+         self.dino_ducking = True
+         self.dino_jumping = False
+     elif user_input[pygame.K_UP] and not self.dino_jumping:
+         self.dino_running = False 
+         self.dino_ducking = False
+         self.dino_jumping = True
+        
+     elif not self.dino_jumping:
+         self.dino_running = True
+         self.dino_ducking = False
+         self.dino_jumping = False
 
      if self.step_index >= 10:
-        self.step_index = 0
+         self.step_index = 0
 
 
     def draw(self, screen):
@@ -65,7 +67,7 @@ class Dinosaur(Sprite):
             self.jump_vel -= 0.8 #Salto, cuando llega a negativo, baja
         if self.jump_vel < -self.JUMP_VEL: # Cuando llega a JUMP_VEL en negativo, este se detiene
             self.dino_rect.y = self.POS_Y
-            self.dino_jump = False
+            self.dino_jumping = False
             self.jump_vel = self.JUMP_VEL 
 
     def duck(self):
