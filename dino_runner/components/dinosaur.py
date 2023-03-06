@@ -22,30 +22,30 @@ class Dinosaur(Sprite):
 
 
     def update(self, user_input):
-        if self.dino_running:
-            self.run()
-        elif self.dino_ducking:
-            self.duck()
-        elif self.dino_jumping:
-            self.jump()
-         
-        if user_input[pygame.K_DOWN] and not self.dino_jumping:
-            self.dino_running = False 
-            self.dino_ducking = True
-            self.dino_jumping = False
-        elif user_input[pygame.K_UP] and not self.dino_jumping:
-            self.dino_running = False 
-            self.dino_ducking = False
-            self.dino_jumping = True
-        elif not self.dino_jumping:
-            self.dino_running = True
-            self.dino_ducking = False
-            self.dino_jumping = False
-        else:
-            self.run()
+     if self.dino_running:
+        self.run()
+     elif self.dino_ducking:
+        self.duck()
+     elif self.dino_jumping:
+        self.jump()
 
-        if self.step_index >= 10:
-            self.step_index = 0
+     if user_input[pygame.K_DOWN] and not self.dino_jumping:
+        self.dino_running = False 
+        self.dino_ducking = True
+        self.dino_jumping = False
+     elif user_input[pygame.K_UP] and not self.dino_jumping and not self.dino_ducking:
+        self.dino_running = False 
+        self.dino_ducking = False
+        self.dino_jumping = True
+        self.jump_vel = self.JUMP_VEL
+     elif not user_input[pygame.K_UP] and not user_input[pygame.K_DOWN]:
+        self.dino_running = True
+        self.dino_ducking = False
+        self.dino_jumping = False
+
+     if self.step_index >= 10:
+        self.step_index = 0
+
 
     def draw(self, screen):
         screen.blit(self.image, self.dino_rect)
@@ -74,3 +74,6 @@ class Dinosaur(Sprite):
         self.dino_rect.x = self.POS_X
         self.dino_rect.y = self.POS_Y_DUCKING
         self.step_index += 1
+
+        if not self.dino_ducking:
+           self.dino_rect.y = self.POS_Y
