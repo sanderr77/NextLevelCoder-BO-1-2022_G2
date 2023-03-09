@@ -22,8 +22,8 @@ class Game:
         self.text_utils = TextUtils()
         self.game_running = True
         self.powerup_manager = PowerUpManager()
-        self.max_score = 0
-        self.attempts = 0
+        self.is_dark_mode = False
+        
 
 
     def run(self):
@@ -31,59 +31,51 @@ class Game:
         self.playing = True
         self.obstacle_manager.reset_obstacles()
         self.points = 0
-        pygame.init()
         pygame.mixer.init()
 
         
         pygame.mixer.music.load(MUSIC)
         pygame.mixer.music.play()
-
         while self.playing:
             self.events()
             self.update()
             self.draw()
-            
-        
 
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
+
     def update(self):
-        
-                    
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
         self.powerup_manager.update(self.points, self.game_speed, self.player)
-        
+        self.toggle_dark_mode()
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill(COLORS["white"])
         self.draw_background()
 
+        if self.is_dark_mode:
+            self.screen.fill(COLORS["black"])
+        else:
+            self.screen.fill(COLORS["white"])
+
+        self.draw_background()
+
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
         self.powerup_manager.draw(self.screen)
-
-
-        self.screen.blit(self.text_utils.get_score(self.points), (10, 10))
-        
-        max_score_text, max_score_rect = self.text_utils.get_score(self.max_score)
-        self.screen.blit(max_score_text, max_score_rect)
-        attempts_text, attempts_rect = self.text_utils.get_attempts(self.attempts)
-        self.screen.blit(attempts_text, attempts_rect)
-
-        max_score_text, max_score_rect = self.text_utils.get_max_score(self.max_score)
-        self.screen.blit(max_score_text, max_score_rect)
-
-        attempts_text, attempts_rect = self.text_utils.get_attempts(self.attempts)
-        self.screen.blit(attempts_text, attempts_rect)
-
+        self.score()
 
         pygame.display.update()
         pygame.display.flip()
+        if self.is_dark_mode:
+            self.screen.fill(COLORS["black"])
+        else:
+            self.screen.fill(COLORS["white"])
     def draw_background(self):
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
@@ -98,13 +90,19 @@ class Game:
         text, text_rect = self.text_utils.get_score(self.points)
         self.player.check_invincibility()
         self.screen.blit(text, text_rect)
+        if self.points % 500 == 0:
+            self.is_dark_mode = not self.is_dark_mode
+            if self.is_dark_mode:
+                self.screen.fill(COLORS["black"])
+            else:
+                self.screen.fill(COLORS["white"])
+        
+        pygame.display.update()
 
     def show_menu(self, death_count = 0):
         self.game_running = True
         self.screen.fill(COLORS["white"])
-
         self.print_menu_elements(death_count)
-
         pygame.display.update()
         self.handle_key_events()
 
@@ -127,13 +125,19 @@ class Game:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 self.run()
-    
-    def update_max_score(self):
-        if self.points > self.max_score:
-            self.max_score = self.points
 
-    def update_attempts(self):
-        self.attempts += 1
+    def toggle_dark_mode(self):
+        if self.points >= 500 and not self.is_dark_mode:
+            self.is_dark_mode = True
+            pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+        elif self.points >= 1000 and self.is_dark_mode:
+            self.is_dark_mode = False
+            pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    
+    
+
+    
+
 
 
 

@@ -72,7 +72,11 @@ HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 DEFAULT_TYPE = "default"
 
 COLORS = { "black": (0,0,0),
-          "white": (255, 255, 255)
+          "white": (255, 255, 255),
+          "Cyan" : (0, 0, 255),
+          "Green" : (0, 255, 0),
+          "Magenta": (128, 0, 128),
+          "DARK_COLOR": (31, 31, 31),
 
 }
 GAMEOVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
