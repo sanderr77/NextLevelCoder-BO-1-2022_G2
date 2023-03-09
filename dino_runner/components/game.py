@@ -2,9 +2,10 @@ import pygame
 import pygame.mixer
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.text_utils import TextUtils
-from dino_runner.utils.constants import BG, COLORS, ICON, RUNNING, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, MUSIC
+from dino_runner.utils.constants import BG, COLORS, ICON, RUNNING, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, MUSIC, HEART, OOOMAGA
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.power_ups.power_ups_manager import PowerUpManager
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -23,6 +24,7 @@ class Game:
         self.game_running = True
         self.powerup_manager = PowerUpManager()
         self.is_dark_mode = False
+        self.lives = 5
         
 
 
@@ -52,6 +54,10 @@ class Game:
         self.obstacle_manager.update(self)
         self.powerup_manager.update(self.points, self.game_speed, self.player)
         self.toggle_dark_mode()
+        
+        
+        
+
 
     def draw(self):
         self.clock.tick(FPS)
@@ -70,12 +76,18 @@ class Game:
         self.powerup_manager.draw(self.screen)
         self.score()
 
+        for i in range(self.lives):
+            heart_rect = pygame.Rect(10 + (i * 40), 10, 30, 30)
+            self.screen.blit(HEART, heart_rect)
+
+
         pygame.display.update()
         pygame.display.flip()
         if self.is_dark_mode:
             self.screen.fill(COLORS["black"])
         else:
             self.screen.fill(COLORS["white"])
+
     def draw_background(self):
         image_width = BG.get_width()
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))
@@ -134,7 +146,15 @@ class Game:
             self.is_dark_mode = False
             pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     
-    
+    def lose_life(self):
+        self.dino.lives -= 1
+        sound = pygame.mixer.Sound('path/to/sound/file.wav')
+        sound.play()
+
+        if self.dino.lives == 0:
+            self.game_over()
+        else:
+            self.update_lives_display()
 
     
 

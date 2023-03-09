@@ -1,4 +1,5 @@
 import pygame
+import pygame.mixer
 from pygame.sprite import Sprite
 from dino_runner.utils.constants import (RUNNING, 
                                          DUCKING, 
@@ -7,7 +8,9 @@ from dino_runner.utils.constants import (RUNNING,
                                          SHIELD_TYPE,
                                          RUNNING_SHIELD,
                                          DUCKING_SHIELD,
-                                         JUMPING_SHIELD)
+                                         JUMPING_SHIELD,
+                                         DUCKAUDIO,
+                                         JUMPAUDIO)
 
 
 class Dinosaur(Sprite):
@@ -42,13 +45,15 @@ class Dinosaur(Sprite):
         self.dino_jumping = False
         self.jump_vel = self.JUMP_VEL
         self.setup_state_booleans()
+        self.lives = 5
+        
 
     def setup_state_booleans(self):
         self.has_powerup = False
         self.shield = False
         self.show_text = False
         self.shield_time_up = 0
-
+        
 
 
     def update(self, user_input):
@@ -57,9 +62,13 @@ class Dinosaur(Sprite):
 
      if self.dino_ducking:
          self.duck()
+         pygame.mixer.music.load(DUCKAUDIO)
+         pygame.mixer.music.play()
 
      if self.dino_jumping:
          self.jump()
+         pygame.mixer.music.load(JUMPAUDIO)
+         pygame.mixer.music.play()
 
      if user_input[pygame.K_DOWN] and not self.dino_jumping:
          self.dino_running = False 
@@ -124,3 +133,6 @@ class Dinosaur(Sprite):
     def update_to_default(self, current_type):
         if self.type == current_type:
             self.type = DEFAULT_TYPE
+            pygame.init()
+    
+    

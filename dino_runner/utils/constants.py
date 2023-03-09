@@ -84,6 +84,9 @@ GAMEOVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
 MUSIC_DIR = os.path.join(os.path.dirname(__file__), "..", "assets", "other")
 
 MUSIC = os.path.join(MUSIC_DIR, "DinosaurMusic.mp3")
-
+OOOMAGA = os.path.join(MUSIC_DIR, "ooomaga.mp3")
 DEFAULT_TYPE = "default"
 SHIELD_TYPE = "Shield"
+
+DUCKAUDIO = os.path.join(MUSIC_DIR, "DUCK.mp3")
+JUMPAUDIO = os.path.join(MUSIC_DIR, "JUMPAUDIO.mp3")
