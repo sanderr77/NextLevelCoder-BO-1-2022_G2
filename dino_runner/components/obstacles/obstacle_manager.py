@@ -12,34 +12,35 @@ class ObstacleManager:
 
     def update(self, game):
         if len(self.obstacles) == 0:
-            if random.choice([True, False]):
+            if random.randint(0, 2) == 0:
                 self.obstacles.append(Cactus(SMALL_CACTUS))
-            else:
+            elif random.randint(0, 2) == 1:
                 self.obstacles.append(Cactus(LARGE_CACTUS))
-            
-            if random.choice([True, False]):
+            elif random.randint(0, 2) == 2:
                 self.obstacles.append(Bird(BIRD))
 
+        
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(500)
-                game.playing = False
-                break 
+                if not game.player.shield:
+                    pygame.time.delay(500)
+                    game.playing = False
+                    break
+                else:
+                    self.obstacles.remove(obstacle)  
+            else:
+                if obstacle.rect.x < -obstacle.rect.width:
+                    self.obstacles.remove(obstacle)
 
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)
+
+    def reset_obstacles(self):
+        self.obstacles = []
     
-    def check_collisions (self):
-        for i, obstacle in enumerate(self.obstacles):
-            for other_obstacle in self.obstacles[i+1:]:
-                if obstacle.rect.colliderect(other_obstacle.rect):
-                    if obstacle.rect.x <= other_obstacle.rect.x:
-                        self.obstacles.remove(obstacle)
-                    else:
-                        self.obstacles.remove(other_obstacle)
-                    break
+    
 
     
 

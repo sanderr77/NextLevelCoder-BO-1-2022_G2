@@ -70,3 +70,16 @@ BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 
 DEFAULT_TYPE = "default"
+
+COLORS = { "black": (0,0,0),
+          "white": (255, 255, 255)
+
+}
+GAMEOVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
+
+MUSIC_DIR = os.path.join(os.path.dirname(__file__), "..", "assets", "other")
+
+MUSIC = os.path.join(MUSIC_DIR, "DinosaurMusic.mp3")
+
+DEFAULT_TYPE = "default"
+SHIELD_TYPE = "Shield"

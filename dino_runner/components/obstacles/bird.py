@@ -6,12 +6,7 @@ import random
 class Bird(Obstacle):
 
     def __init__(self, image_list):
-        super().__init__(image_list, 0)
-        self.rect.y = random.randint(100, 250)
-        self.rect.x = SCREEN_WIDTH
-
-    def update(self, game_speed, obstacles):
-        super().update(game_speed, obstacles)
-        if self.rect.x < -self.rect.width:
-            obstacles.pop()
+        self.type = random.randint(0,1 )
+        super().__init__(image_list, self.type)
+        self.rect.y = 250
 
